@@ -6,6 +6,9 @@ the program is divided in 10 parts :
 # 1st part : getting data
 connect to the url, download the files. 
 
+Note :  this part can be omitted because the text of the assignement says "code should have a file run_analysis.R in the main directory that can be run as long as the Samsung data is in your working directory".
+I think this part is usefull, so I let it in my final submission.
+
 # 2nd part : subsetting "features"
 selects the features with mean and std.
 
@@ -39,4 +42,4 @@ create the file.
 # 11th part : cleaning 
 cleans every internal variable.
 
-For this assignement I read many things on internet. Special thanks to a, b, c
+In this course I read many things on internet. Special thanks to rdpeng, benjamin-chan, glynn, sdrdis, and many others. Their point of view on the assignement helped me to construct my own submission.

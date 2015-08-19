@@ -5,64 +5,63 @@ filename<-"dossier"
 download.file(url, destfile = filename)
 setwd("C:/Users/jerome/Documents/R")
 data <- unzip(filename)
+setwd("C:/Users/jerome/Documents/R/UCI HAR Dataset")
 
 ## 2nd part : subsetting "features"
-setwd("C:/Users/jerome/Documents/R/UCI HAR Dataset")
-feature.names <- read.table("features.txt")
-features.ok <- grep("std|mean", feature.names$V2)
-print(features.ok)
+feature_names <- read.table("features.txt")
+features_ok <- grep("std|mean", feature_names$V2)
 
 ## 3rd part 1 : subsetting "train"
-train.features <- read.table("train/X_train.txt")
-desired.train.features <- train.features[,features.ok]
+train_features <- read.table("train/X_train.txt")
+desired_train_features <- train_features[,features_ok]
 
 ## 3rd part 2 : subsetting "test"
-test.features <- read.table("test/X_test.txt")
-desired.test.features <- test.features[,features.ok]
+test_features <- read.table("test/X_test.txt")
+desired_test_features <- test_features[,features_ok]
 
 ## 4th part : merging and naming
-total.features <- rbind(desired.train.features, desired.test.features)
-colnames(total.features) <- feature.names[features.ok, 2]
+total_features <- rbind(desired_train_features, desired_test_features)
+colnames(total_features) <- feature_names[features_ok, 2]
 
-## 5th part : reading all about activities                          
-train.activities <- read.table("train/y_train.txt")
-test.activities <- read.table("test/y_test.txt")
-activity.labels <- read.table("activity_labels.txt")
+## 5th part : reading all about activities
+test_activities <- read.table("test/y_test.txt")
+train_activities <- read.table("train/y_train.txt")
+activity_labels <- read.table("activity_labels.txt")
 
 ## 6th part : creating final.activity
-final.activity<- rbind(train.activities, test.activities)
-final.activity$activity <- factor(final.activity$V1, levels = activity.labels$V1, labels = activity.labels$V2)
+final_activity<- rbind(train_activities, test_activities)
+final_activity$activity <- factor(final_activity$V1, levels = activity_labels$V1, labels = activity_labels$V2)
 
 ## 7th part : reading all about subjects
-train.subjects <- read.table("train/subject_train.txt")
-test.subjects <- read.table("test/subject_test.txt")
+test_subjects <- read.table("test/subject_test.txt")
+train_subjects <- read.table("train/subject_train.txt")
+
 
 ## 8th part : creating final.subjects
-final.subjects <- rbind(train.subjects, test.subjects)
+final_subjects <- rbind(train_subjects, test_subjects)
 
 ## 9th part : grouping
-subjects.and.activities <- cbind(final.subjects, final.activity$activity)
-colnames(subjects.and.activities) <- c("subject.id", "activity")
-activity.frame <- cbind(subjects.and.activities, total.features)
-result.frame <- aggregate(activity.frame[,3:81], by = list(activity.frame$subject.id, activity.frame$activity), FUN = mean)
-colnames(result.frame)[1:2] <- c("subject.id", "activity")
+subjects_and_activities <- cbind(final_subjects, final_activity$activity)
+colnames(subjects_and_activities) <- c("subject_id", "activity")
+activity_frame <- cbind(subjects_and_activities, total_features)
+result_frame <- aggregate(activity_frame[,3:81], by = list(activity_frame$subject_id, activity_frame$activity), FUN = mean)
+colnames(result_frame)[1:2] <- c("subject_id", "activity")
 
 # 10th part : creating final file
-write.table(result.frame, file="tidy_data_mean_measures.txt", row.names = FALSE)
+write.table(result_frame, file="tidy_data_mean_measures.txt", row.names = FALSE)
 
 # 11th part : cleaning 
-rm(activity.frame)
-rm(activity.labels)
-rm(desired.test.features)
-rm(feature.names)
-rm(result.frame)
-rm(subjects.and.activities)
-rm(test.activities)
-rm(test.subjects)
-rm(test.features)
-rm(final.activity)
-rm(total.features)
-rm(final.subjects)
-rm(train.activities)
-rm(train.features)
-rm(train.subjects)
+rm(activity_frame)
+rm(activity_labels)
+rm(desired_test_features)
+rm(feature_names)
+rm(subjects_and_activities)
+rm(test_activities)
+rm(test_subjects)
+rm(test_features)
+rm(final_activity)
+rm(total_features)
+rm(final_subjects)
+rm(train_activities)
+rm(train_features)
+rm(train_subjects)

@@ -22,8 +22,7 @@ Data cleaning is done in four parts
 
     Add activities, by name, to the  data frame resulting from part 3.
 
-
-
+    the resulting data.frame is stored in a variable called "result_frame".
 
 More details are provided in the program.
 
