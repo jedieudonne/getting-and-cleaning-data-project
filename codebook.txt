@@ -115,7 +115,7 @@ At the end of the program, variables are cleaned.
 
 At the end
 
-The resulting data frame, is a variable called "result.frame" it is send to the file "tidy_data_mean_measures.txt".
+The resulting data frame, is a variable called "result_frame" it is send to the file "tidy_data_mean_measures.txt".
 It contains every "subject.id/activity" combination in columns 1 and 2.
 It also contains the mean and standard deviation of each measure for that combianation  in columns 3 to 81.
 

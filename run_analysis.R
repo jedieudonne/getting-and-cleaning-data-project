@@ -45,7 +45,8 @@ subjects_and_activities <- cbind(final_subjects, final_activity$activity)
 colnames(subjects_and_activities) <- c("subject_id", "activity")
 activity_frame <- cbind(subjects_and_activities, total_features)
 result_frame <- aggregate(activity_frame[,3:81], by = list(activity_frame$subject_id, activity_frame$activity), FUN = mean)
-colnames(result_frame)[1:2] <- c("subject_id", "activity")
+colnames(result_frame)[1] <- "subject_id"
+colnames(result_frame)[2] <- "activity"
 
 # 10th part : creating final file
 write.table(result_frame, file="tidy_data_mean_measures.txt", row.names = FALSE)
