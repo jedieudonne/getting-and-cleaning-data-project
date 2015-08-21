@@ -1,42 +1,24 @@
 # getting-and-cleaning-data-project
 
-this is the run analysis programming assignement. 
-the program is divided in 12 parts :
+this is the run analysis programming assignement. The first commented line sets the working directory to UCI HAR Dataset. This line may be uncommented if you are already working in this directory.
 
-# 1st part : getting data
-connect to the url, download the files. 
+#Initial Data
 
-Note :  this part can be omitted because the text of the assignement says "code should have a file run_analysis.R in the main directory that can be run as long as the Samsung data is in your working directory".
-I think this part is usefull, so I let it in my final submission.
+data is provided at  http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones. Take a look at readme_data.
 
-# 2nd part : reading data
-reads every file necessary to the programm.
+the following line can be added at the beggining of the program to download, unzip and store the data.
 
-# 3rd part : subsetting "features"
-selects the features with mean and std.
+	url <- "http://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+	filename<-"data"
+	download.file(url, destfile = filename)
+	data <- unzip(filename)
+	setwd("./UCI HAR Dataset")
 
-# 4th part 1 : subsetting "train"
-subsets iun accordance with the features 
+#Tidy data
+the program is divided in 7 steps described in the codebook.
 
-# 5th part 2 : subsetting "test"
-tests and subsets in accordance with the features 
+#Output
+the program provides two outputs : a variable called result_frame, and a text file called tidy_data_mean_measures.txt stored in the UCI HAR Dataset directory.
 
-# 6th part : merging and naming
-concatenate train and test, and gives names to the columns.
-             
-# 7th part : creating final_activity
-concatenate activity files.
 
-# 8th part : creating final_subjects
-concatenate activity files.
 
-# 9th part : grouping
-add activities and ids to the data_frame, 
-
-# 10th part : creating final file
-create the file.
-
-# 11th part : cleaning 
-cleans every internal variable.
-
-In this course I read many things on internet. Special thanks to rdpeng, Dheeraj Agarwal, Gregory D. Horne, benjamin-chan, glynn, sdrdis, and many others. Their point of view on the assignement helped me to construct my own submission.

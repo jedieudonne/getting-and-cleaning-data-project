@@ -1,64 +1,52 @@
-## 1st part : getting data
-url <- "http://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
-filename<-"dossier"
-download.file(url, destfile = filename)
-setwd("C:/Users/jerome/Documents/R")
-data <- unzip(filename)
-setwd("C:/Users/jerome/Documents/R/UCI HAR Dataset")
+library(dplyr)
+#setwd("./UCI HAR Dataset")
+# step 1 : reads everything
+activity_labels<-read.table("activity_labels.txt")
+features_txt<-read.table("features.txt")
+subject_test<-read.table("./test/subject_test.txt")
+X_test<-read.table("./test/X_test.txt")
+activity_test<-read.table("./test/y_test.txt")
+subject_train<-read.table("./train/subject_train.txt")
+X_train<-read.table("./train/X_train.txt")
+activity_train<-read.table("./train/y_train.txt")
 
-##  2nd part reads everything usefull
-feature_names <- read.table("features.txt")
-train_features <- read.table("train/X_train.txt")
-test_features <- read.table("test/X_test.txt")
-test_activities <- read.table("test/y_test.txt")
-train_activities <- read.table("train/y_train.txt")
-activity_labels <- read.table("activity_labels.txt")
-test_subjects <- read.table("test/subject_test.txt")
-train_subjects <- read.table("train/subject_train.txt")
 
-## 3rd part : subsetting "features"
-features_ok <- grep("std|mean", feature_names$V2)
+# step 2 : create a logical vector with features containing mean or std. 
+# Creates a vector with all the features containing mean or std
+featuresmean<-grepl("mean",features_txt[,2])
+featuresstd<-grepl("std",features_txt[,2])
+name_of_features_selected<-features_txt[featuresmean|featuresstd,]
+features_selected_logical<-featuresmean|featuresstd
 
-## 4th part 1 : subsetting "train"
-desired_train_features <- train_features[,features_ok]
+# step 3 : subset everything in accordance with features_selected_logical
+X_test_selected<-X_test[,features_selected_logical]
+X_train_selected<-X_train[,features_selected_logical]
 
-## 5th part 2 : subsetting "test"
-desired_test_features <- test_features[,features_ok]
+# step 4 : concatenate X_test_selected and X_train_selected into features_total_selected and name the columns
+features_total_selected<-rbind(X_test_selected,X_train_selected)
+colnames(features_total_selected)<-features_txt[features_selected_logical,2]
 
-## 6th part : merging and naming
-total_features <- rbind(desired_train_features, desired_test_features)
-colnames(total_features) <- feature_names[features_ok, 2]
+# step 5 : creates columns for activity and subject_id.
+activity<-rbind(activity_test,activity_train)
+i=1
+names=c()
+while(i<=length(activity[,1])){
+  names<-c(names,as.character(activity_labels$V2[activity[i,1]]))
+  i=i+1
+}
+activity<-names
+subject<-rbind(subject_test,subject_train)
+activity_and_subject<-cbind(activity,subject)
+colnames(activity_and_subject)<-c("activity","subject_id")
 
-## 7th part : creating final_activity
-final_activity<- rbind(train_activities, test_activities)
-final_activity$activity <- factor(final_activity$V1, levels = activity_labels$V1, labels = activity_labels$V2)
-
-## 8th part : creating final_subjects
-final_subjects <- rbind(train_subjects, test_subjects)
-
-## 9th part : grouping
-subjects_and_activities <- cbind(final_subjects, final_activity$activity)
-colnames(subjects_and_activities) <- c("subject_id", "activity")
-activity_frame <- cbind(subjects_and_activities, total_features)
-result_frame <- aggregate(activity_frame[,3:81], by = list(activity_frame$subject_id, activity_frame$activity), FUN = mean)
-colnames(result_frame)[1] <- "subject_id"
-colnames(result_frame)[2] <- "activity"
-
-# 10h part : creating final file
+# step 6 : create the final frame and the txt file
+final_frame<-cbind(activity_and_subject , features_total_selected)
+result_frame <- aggregate(final_frame[,3:81], by = list(final_frame$subject_id, final_frame$activity), FUN = mean)
+colnames(result_frame)[which(names(result_frame) == "Group.1")] <- "subject_id"
+colnames(result_frame)[which(names(result_frame) == "Group.2")] <- "activity"
 write.table(result_frame, file="tidy_data_mean_measures.txt", row.names = FALSE)
 
-# 11th part : cleaning 
-rm(activity_frame)
-rm(activity_labels)
-rm(desired_test_features)
-rm(feature_names)
-rm(subjects_and_activities)
-rm(test_activities)
-rm(test_subjects)
-rm(test_features)
-rm(final_activity)
-rm(total_features)
-rm(final_subjects)
-rm(train_activities)
-rm(train_features)
-rm(train_subjects)
+#step 7 : clean the variables
+rm(activity_labels,features_txt,subject_test,X_test,activity_test,X_test_selected,X_train_selected,activity_and_subject,activity,subject_train,X_train,activity_train,subject,name_of_features_selected)
+
+

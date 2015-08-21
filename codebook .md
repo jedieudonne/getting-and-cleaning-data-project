@@ -9,26 +9,33 @@ Program work
 
 The run_analysis program downloads and unzips the data. 
 Then data are stored in a directory called UCI HAR Dataset.
-Data cleaning is done in four parts
+Data cleaning is done in 7 steps : 
+
+	# 1st step : reading data
+	reads every file necessary to the programm.
+
+	# 2nd step : logical vector for subsetting
+	create a logical vector with features containing mean or std. Although Creates a vector with all the features containing mean or std : name_of_features_selected
+	
+	# 3rd step : subsetting "train"
+	subsets X_test and X_test in accordance with the logical vector created before. 
 
 
+	# 4th step : creating a data frame with all the observation from "test" and "train" to X_test_selected and X_train_selected.
+	concatenate the 2 resulting in features_total_selected and name the column with name_of_features_selected
 
-    
-    Putting training and test datasets into one dataset.
+	# 5th step : creating two columns with activ and subject.
 
-    Subsetting only those features from the original dataset that are a mean or standard deviation measure (mean or std in feature name).
+	# 6th step : creating the final frame and the text file.
+	creates final_frame with data, id and activity. Creates result_frame by calculating the mean of each subject and each activity.Then creates a text file called tidy_data_mean_measures.txt 
+             
+	7th step : cleaning.
+	Cleans every internal variable used.
 
-    Add subject ids (numbers 1-30) to the  data frame made in part 1.
-
-    Add activities, by name, to the  data frame resulting from part 3.
-
-    the resulting data.frame is stored in a variable called "result_frame".
-
-More details are provided in the program.
 
 At the end, there's still 81 column in the data set. 
 
-1 subject.id : The subject ID, an integer in the range 1:30
+1 subject_id : The subject ID, an integer in the range 1:30
 
 2 activity : The activity performed by the subject
 
@@ -194,9 +201,7 @@ At the end, there's still 81 column in the data set.
 At the end of the program, variables are cleaned.
 
 
-At the end
-
-The resulting data frame, is a variable called "result_frame" it is send to the file "tidy_data_mean_measures.txt".
+At the end the resulting data frame, is a variable called "result_frame" it is send to the file "tidy_data_mean_measures.txt".
 It contains every "subject_id/activity" combination in columns 1 and 2.
 It also contains the mean and standard deviation of each measure for that combianation  in columns 3 to 81.
 
